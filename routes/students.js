@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 // Import model(s)
-const { Student, sequelize } = require('../db/models');
+const { Student, Classroom, StudentClassroom, sequelize } = require('../db/models');
 const { Op } = require("sequelize");
 
 // List
@@ -32,13 +32,17 @@ router.get('/', async (req, res, next) => {
     };
 
     let result = {};
-
     result.rows = await Student.findAll({
         attributes: ['id', 'firstName', 'lastName', 'leftHanded'],
         order: [["lastName"], ["firstName"]],
         limit,
         offset,
-        where
+        where,
+        include: {
+            model: Classroom,
+            attributes: ["id", "name"],
+            through: {attributes: ["grade"]},
+        }
     });
 
     result.page = offset / limit + 1 || 1;
