@@ -8,7 +8,6 @@ const { Op } = require("sequelize");
 
 // List
 router.get('/', async (req, res, next) => {
-    let errorResult = { errors: [], count: 0, pageCount: 0 };
     let size;
     let page;
     try {
